@@ -12,9 +12,10 @@ python -m scripts.cli research --topic "<your topic>"
 This uses whichever of Tavily / Firecrawl / Serper keys you set (`.env`) and prints a
 `source_pack` draft (URLs + snippets + People-Also-Ask). Paste it into `_work/source_pack.md`.
 
-**B. Zero keys (agent does it):** the agent searches/reads with its own tools, or you paste 5
-links + notes you prepared. The workshop homework — *site, 2-3 competitors, one authoritative
-source, one audience observation, one topic* — is exactly this input.
+**B. Zero keys (agent does it):** the agent searches/reads with its own tools, or you paste the
+5-10 links + notes you prepared. The workshop homework — *your site, your best content on the
+topic, 1-2 authoritative sources, one audience observation, one topic (a competitor or two
+optional)* — is exactly this input.
 
 ## Score each source (credibility)
 
@@ -24,7 +25,7 @@ reputable material.
 
 ## Extract while you research
 - **Audience questions** the piece should answer (aim for 5).
-- **Competitor gaps** — what they all say vs what they all miss (your opening).
+- **Competitor gaps** *(optional)* — what competitors all say vs what they all miss (a bonus angle).
 - **Numbers with a source** — these become your citable backbone.
 
 ---

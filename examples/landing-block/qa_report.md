@@ -27,4 +27,4 @@
 ## Next step
 READY → publish (founder's call — the agent does not auto-publish).
 Tip: `question_h2s` is 66 (one of three H2s isn't a question). Phrasing the "FAQ" head as a
-question, or merging it, would push it higher — optional, already above the 85 gate.
+question, or merging it, would push it higher — optional, already above the 72 gate.

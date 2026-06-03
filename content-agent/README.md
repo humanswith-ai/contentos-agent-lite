@@ -23,7 +23,7 @@ Start with `00_FOUNDER_CONTENT_AGENT.md` — it's the operating contract.
 | `04_BRIEF_READINESS_GATE.md` | the brief (no draft before this passes) |
 | `05_DRAFT_QUALITY_GATE.md` | write from the source pack; score it |
 | `06_EDITORIAL_UPLIFT_GATE.md` | improve clarity/structure/CTA — no new facts |
-| `07_PUBLISH_READINESS_GATE.md` | publish only at 85+ and no P0 |
+| `07_PUBLISH_READINESS_GATE.md` | publish only at 72+ and no P0 |
 
 ## Working files (`_work/`)
 

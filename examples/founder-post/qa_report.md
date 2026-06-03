@@ -28,4 +28,4 @@
 READY → publish (founder's call — the agent does not auto-publish).
 Note: `numerical_attribution` is 80 — the "30-second rollback" figure is a team practice, not a
 sourced external stat, so it isn't anchored to a citation. That's honest; the two DORA numbers that
-*do* carry weight are both sourced. Already well above the 85 gate.
+*do* carry weight are both sourced. Already well above the 72 gate.

@@ -24,8 +24,8 @@ cite numbers, use structure, avoid AI-slop, stay in voice, and is it actually us
 
 ## Verdict thresholds
 - **< 55 → STOP** (P0): too weak — usually missing sources/numbers/structure or heavy slop.
-- **55–84 → REVISE**: proceed to `06` to uplift.
-- **≥ 85 and no P0 → READY**.
+- **55–71 → REVISE**: proceed to `06` to uplift.
+- **≥ 72 and no P0 → READY**.
 
 ---
 

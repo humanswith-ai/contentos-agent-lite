@@ -43,6 +43,6 @@ Score:   <0-100>   (completeness + every fact sourced)
 Status:  READY | REVISE | STOP
 Blockers:
   - [P0] A fact has no source.
-  - [P0] A required section (Facts/Numbers/Audience questions/Competitor gaps/Founder angle) is empty.
+  - [P0] A required section (Facts/Numbers/Audience questions/Founder angle) is empty.
 Next step: if READY → build 04_BRIEF_READINESS_GATE.md
 ```

@@ -9,6 +9,10 @@ WEIGHTS = {  # sum = 100
     "anti_slop": 10, "citation_markers": 8,
 }
 
+# Publish bar. Real ContentOS publishes ~72+ for most formats; a blanket 85 fails too much
+# (a warm letter or short post rarely clears 85 on the citable-format-tuned scorer).
+READY_THRESHOLD = 72
+
 
 def _first_words(text: str, n: int = 100) -> str:
     return " ".join(re.sub(r"^#.*$", "", text, flags=re.M).split()[:n])
@@ -64,7 +68,8 @@ def _axis_citation_markers(text: str) -> int:
     return min(100, markers * 25)
 
 
-def score_draft(draft: str, lang: str = "en", source_pack: str | None = None) -> dict:
+def score_draft(draft: str, lang: str = "en", source_pack: str | None = None,
+                ready_threshold: int = READY_THRESHOLD) -> dict:
     axes = {
         "direct_answer": _axis_direct_answer(draft),
         "named_entities": _axis_named_entities(draft),
@@ -87,5 +92,5 @@ def score_draft(draft: str, lang: str = "en", source_pack: str | None = None) ->
         blockers.append({"severity": "P1", "axis": "citation_markers", "message": "numbers without citations",
                          "fix_hint": "anchor stats with [n] sources"})
     has_p0 = any(b["severity"] == "P0" for b in blockers)
-    verdict = "STOP" if (overall < 55 or has_p0) else ("READY" if overall >= 85 else "REVISE")
+    verdict = "STOP" if (overall < 55 or has_p0) else ("READY" if overall >= ready_threshold else "REVISE")
     return {"overall": overall, "axes": axes, "blockers": blockers, "verdict": verdict}

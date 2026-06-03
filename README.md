@@ -58,7 +58,7 @@ scaffolds `content-agent/` **and teaches your project's coding agent** — a man
 | `04_BRIEF_READINESS_GATE.md` | the brief | missing audience / goal / angle / CTA |
 | `05_DRAFT_QUALITY_GATE.md` | write from sources, score it | claim not in source pack; score < 55 |
 | `06_EDITORIAL_UPLIFT_GATE.md` | improve — no new facts | uplift invented a fact |
-| `07_PUBLISH_READINESS_GATE.md` | go / no-go | score < 85 or any P0 |
+| `07_PUBLISH_READINESS_GATE.md` | go / no-go | score < 72 or any P0 |
 
 Optional deterministic helpers:
 

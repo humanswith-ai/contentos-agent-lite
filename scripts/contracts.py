@@ -1,7 +1,9 @@
 """Validate ContentOS Agent Lite working-file shapes. Pure, no I/O."""
 import re
 
-_PACK_SECTIONS = ["Facts", "Numbers", "Audience questions", "Competitor gaps", "Founder angle"]
+# "Competitor gaps" is OPTIONAL — the founder's own knowledge base + content sources
+# (5-10 links on the topic) are the requirement; competitor analysis is a bonus angle.
+_PACK_SECTIONS = ["Facts", "Numbers", "Audience questions", "Founder angle"]
 _BRIEF_FIELDS = ["Audience", "Goal", "Format", "Angle", "Structure", "Must-mention", "Forbidden", "CTA", "Success criteria"]
 
 
