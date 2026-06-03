@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-label="ContentOS Agent Lite — open-source content agent for founders">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c0f0e"/>
+      <stop offset="1" stop-color="#14201c"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1280" height="6" fill="#2dd4a7"/>
+  <text x="80" y="150" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="22" letter-spacing="3" fill="#2dd4a7">HUMANSWITH.AI · OPEN SOURCE · MIT</text>
+  <text x="80" y="270" font-family="Georgia, 'Times New Roman', serif" font-size="76" font-weight="700" fill="#f4f6f5">ContentOS Agent Lite</text>
+  <text x="80" y="360" font-family="-apple-system, Segoe UI, Roboto, sans-serif" font-size="40" fill="#cdd6d2">Open-source content agent for founders.</text>
+  <text x="80" y="416" font-family="-apple-system, Segoe UI, Roboto, sans-serif" font-size="40" fill="#cdd6d2">Write from a <tspan font-style="italic" fill="#2dd4a7">process</tspan>, not a prompt.</text>
+  <text x="80" y="520" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="24" fill="#8aa39b">context → sources → brief → draft → checks → publish</text>
+  <text x="80" y="572" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="22" fill="#5f726b">github.com/humanswith-ai/contentos-agent-lite · runs in Claude Code / Cursor / Codex · EN · RU · AR</text>
+</svg>
