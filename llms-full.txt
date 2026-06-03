@@ -369,7 +369,7 @@ on top of weak sources just produces confident, wrong text.
 
 Assemble `_work/source_pack.md`. This is the **only** material the draft may draw facts from.
 
-## Required shape (every section must be filled)
+## Required shape (required sections filled; Intent + Competitor gaps are optional)
 
 ```markdown
 ## Facts
@@ -382,7 +382,10 @@ Assemble `_work/source_pack.md`. This is the **only** material the draft may dra
 ## Audience questions
 - <question>                              # aim for ~5
 
-## Competitor gaps
+## Intent / queries                       # optional — auto-filled from Serper PAA + related searches
+- <what your audience actually searches>  # shape the angle + audience questions around these
+
+## Competitor gaps                        # optional — a bonus angle, not required
 - <what competitors miss>
 
 ## Founder angle
@@ -436,6 +439,11 @@ Forbidden: <claims/tones the claim-policy bans>
 CTA: <the single call to action>
 Success criteria: <how you'll know it worked — e.g. "5 qualified replies">
 ```
+
+> **Use the intent signal.** If `source_pack.md` has an `## Intent / queries` block
+> (Serper People-Also-Ask + related searches), let it shape **Audience**, **Angle**, and
+> **Must-mention** — write to the real questions and phrasings your audience searches. This is the
+> free, transparent stand-in for the hosted ContentOS keyword-clusters + AEO analytics.
 
 ## Why so strict
 

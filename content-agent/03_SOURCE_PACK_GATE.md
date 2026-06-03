@@ -2,7 +2,7 @@
 
 Assemble `_work/source_pack.md`. This is the **only** material the draft may draw facts from.
 
-## Required shape (every section must be filled)
+## Required shape (required sections filled; Intent + Competitor gaps are optional)
 
 ```markdown
 ## Facts
@@ -15,7 +15,10 @@ Assemble `_work/source_pack.md`. This is the **only** material the draft may dra
 ## Audience questions
 - <question>                              # aim for ~5
 
-## Competitor gaps
+## Intent / queries                       # optional — auto-filled from Serper PAA + related searches
+- <what your audience actually searches>  # shape the angle + audience questions around these
+
+## Competitor gaps                        # optional — a bonus angle, not required
 - <what competitors miss>
 
 ## Founder angle

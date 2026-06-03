@@ -17,6 +17,11 @@ CTA: <the single call to action>
 Success criteria: <how you'll know it worked — e.g. "5 qualified replies">
 ```
 
+> **Use the intent signal.** If `source_pack.md` has an `## Intent / queries` block
+> (Serper People-Also-Ask + related searches), let it shape **Audience**, **Angle**, and
+> **Must-mention** — write to the real questions and phrasings your audience searches. This is the
+> free, transparent stand-in for the hosted ContentOS keyword-clusters + AEO analytics.
+
 ## Why so strict
 
 A brief with no audience, no goal, no angle, or no CTA produces generic text. The agent treats any

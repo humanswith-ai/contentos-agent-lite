@@ -29,3 +29,30 @@ def test_to_source_pack_md_shape():
         {"sources": [{"title": "Stripe", "url": "https://stripe.com", "content": "Stripe processed $1.4T", "date": "2024"}],
          "manual_fallback": None, "providers_used": ["tavily"]}, "payments")
     assert "## Facts" in md and "https://stripe.com" in md and "## Audience questions" in md
+
+
+def test_intent_block_includes_paa_and_related():
+    md = research.to_source_pack_md({
+        "sources": [
+            {"title": "How do founders pick a stack?", "url": "", "content": "", "kind": "paa"},
+            {"title": "best payment processor for startups", "url": "", "content": "", "kind": "related"},
+        ], "manual_fallback": None, "providers_used": ["serper"]}, "payments")
+    assert "## Intent / queries" in md
+    assert "best payment processor for startups" in md  # related search surfaced
+    assert "How do founders pick a stack?" in md         # PAA surfaced as intent too
+
+
+@responses.activate
+def test_serper_captures_related_searches(monkeypatch):
+    monkeypatch.setenv("SERPER_API_KEY", "test")
+    monkeypatch.delenv("TAVILY_API_KEY", raising=False)
+    monkeypatch.delenv("FIRECRAWL_API_KEY", raising=False)
+    responses.add(
+        responses.POST, "https://google.serper.dev/search",
+        json={"organic": [{"title": "S", "link": "https://s.com", "snippet": "x"}],
+              "peopleAlsoAsk": [{"question": "Why Stripe?", "snippet": "api"}],
+              "relatedSearches": [{"query": "stripe vs adyen"}]}, status=200)
+    r = research.gather("payments")
+    kinds = [s.get("kind") for s in r["sources"]]
+    assert "related" in kinds
+    assert any(s.get("title") == "stripe vs adyen" for s in r["sources"])

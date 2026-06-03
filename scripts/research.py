@@ -1,4 +1,4 @@
-"""Research providers: Tavily (search) + Firecrawl (read URL) + Serper (SERP/PAA).
+"""Research providers: Tavily (search) + Firecrawl (read URL) + Serper (SERP / PAA / related).
 All keys optional; no key -> manual-paste fallback. Timeout + never-crash; cache to _work/.cache/."""
 import os
 import json
@@ -51,7 +51,9 @@ def _serper(topic: str) -> list[dict]:
                for o in data.get("organic", [])[:5]]
         paa = [{"title": q.get("question"), "url": "", "content": q.get("snippet", ""), "date": "", "kind": "paa"}
                for q in data.get("peopleAlsoAsk", [])]
-        return out + paa
+        related = [{"title": r.get("query"), "url": "", "content": "", "date": "", "kind": "related"}
+                   for r in data.get("relatedSearches", []) if r.get("query")]
+        return out + paa + related
     except requests.RequestException:
         return []
 
@@ -105,14 +107,22 @@ def gather(topic: str, urls: list[str] | None = None) -> dict:
 
 
 def to_source_pack_md(result: dict, topic: str) -> str:
-    facts, questions = [], []
+    facts, questions, intent = [], [], []
     for s in result.get("sources", []):
-        if s.get("kind") == "paa":
+        kind = s.get("kind")
+        if kind == "paa":
             questions.append(f"- {s['title']}")
+            intent.append(f"- {s['title']}  (people-also-ask)")
+        elif kind == "related":
+            intent.append(f"- {s['title']}  (related search)")
         elif s.get("url"):
             snippet = (s.get("content") or "").strip().replace("\n", " ")[:160]
             facts.append(f"- {snippet} — {s['url']} ({s.get('date') or 'n.d.'})")
+    intent_block = "\n".join(intent) or (
+        "- (set a SERPER_API_KEY for People-Also-Ask + related queries, "
+        "or list the searches your audience would actually type)")
     return (f"# Source pack — {topic}\n\n## Facts\n" + ("\n".join(facts) or "- (add facts)") +
             "\n\n## Numbers\n- (extract numbers from facts)\n\n## Audience questions\n" +
             ("\n".join(questions) or "- (add audience questions)") +
-            "\n\n## Competitor gaps\n- (what competitors miss)\n\n## Founder angle\n- (your unique POV)\n")
+            "\n\n## Intent / queries\n" + intent_block +
+            "\n\n## Competitor gaps\n- (what competitors miss — optional)\n\n## Founder angle\n- (your unique POV)\n")
