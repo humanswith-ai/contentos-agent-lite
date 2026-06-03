@@ -3,13 +3,13 @@
 > Open-source **AI content agent for founders** that writes from a verifiable **process, not a prompt**:
 > 7 gates (context → sources → brief → draft → checks → uplift → publish), scoring every draft 0–100
 > across 8 axes, locally. Runs in Claude Code / Cursor / Codex with zero API keys; sharper with a free
-> research key. A transparent, free, self-hosted alternative to one-shot AI writers. Scores EN + RU
+> research key. A transparent, free, self-hosted alternative to one-shot AI writers. Scores EN + RU + AR
 > content. By Humanswith.ai. MIT.
 
 ## What it is
 - A portable `content-agent/` folder of 7 gate files (`00`–`07`) the founder's coding agent follows.
 - An optional Python layer: `research` (Tavily/Firecrawl/Serper + no-key fallback), `score`
-  (transparent 8-axis AEO/quality heuristic, 0–100), `check` (anti-slop, EN+RU).
+  (transparent 8-axis AEO/quality heuristic, 0–100), `check` (anti-slop, EN/RU/AR).
 - Hard rule: no draft before context/research/source-pack/brief pass; a fact without a source is a stop.
 
 ## How it differs from one-shot AI writers

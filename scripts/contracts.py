@@ -1,4 +1,4 @@
-"""Validate ContentOS Agent Lite working-file shapes (spec section 7). Pure, no I/O."""
+"""Validate ContentOS Agent Lite working-file shapes. Pure, no I/O."""
 import re
 
 _PACK_SECTIONS = ["Facts", "Numbers", "Audience questions", "Competitor gaps", "Founder angle"]

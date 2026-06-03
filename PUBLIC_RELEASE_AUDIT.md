@@ -18,6 +18,7 @@ Run this checklist before any push to `humanswith-ai/contentos-agent-lite` (per
 
 ## Self-contained (repo-release-packaging)
 - [ ] No reference to `greg-personal-claude`, `hwai-internal`, private Notion, or local paths.
+- [ ] No dangling internal-doc refs: `grep -REn '\.claude/rules|services/vhumanize|aeo_citability|spec section' . --exclude-dir=.venv` → none (they point at the private monorepo, unresolvable for a public reader).
 - [ ] Examples use placeholders / public URLs only.
 - [ ] `LICENSE` (MIT), `SECURITY.md`, `TRUST.md`, `trust/*.trust.json`, `scripts/agent-preinstall-check.sh` present.
 

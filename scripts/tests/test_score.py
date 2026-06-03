@@ -46,3 +46,9 @@ def test_verdict_thresholds():
     r = score.score_draft(STRONG, "en")
     if r["overall"] >= 85 and not any(b["severity"] == "P0" for b in r["blockers"]):
         assert r["verdict"] == "READY"
+
+
+def test_arabic_question_h2_detected():
+    ar = "## ما هي المنصة؟\nتعالج المنصة 100 ألف طلب في الثانية [1].\n\n[1] https://example.com\n"
+    r = score.score_draft(ar, "ar")
+    assert r["axes"]["question_h2s"] == 100

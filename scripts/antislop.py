@@ -1,10 +1,9 @@
-"""Deterministic anti-slop scanner. EN rules ported from .claude/rules/anti-slop-v2.md;
-RU calques/intensifiers from .claude/rules/ru-marketing-translation.md.
+"""Deterministic anti-slop / marketing-cliche scanner for EN, RU, and AR.
 Transparent + extensible. >=1 hit in a hero/title should block; >=3 hits overall = block."""
 import re
 
-# (rule_id, lang, pattern). Highest-signal subset; extend to the full 20 EN rules
-# (anti-slop-v2.md) + RU calque verbs (ru-marketing-translation.md) as a follow-up.
+# (rule_id, lang, pattern). Highest-signal subset per language; extend as needed.
+# EN rules apply to every language (anglicisms leak in); RU/AR rules apply only to their language.
 _RULES = [
     ("sycophantic_opening", "en", r"^(great|excellent|fantastic|wonderful|amazing)\s+(question|point|observation|insight)!?"),
     ("hedge_filler", "en", r"\bit('s| is) (important|worth|essential|crucial) to (note|mention|remember)\b"),
@@ -18,6 +17,11 @@ _RULES = [
     # RU
     ("ru_intensifier", "ru", r"(мощн(ый|ое|ая|ые)|бесшовн\w*|холистическ\w*|революционн\w*|передов(ой|ое|ая))"),
     ("ru_filler", "ru", r"(стоит отметить|важно отметить|в современном мире|на сегодняшний день)"),
+    # AR — Modern Standard Arabic «حشو» (filler), marketing cliches, and dialect markers
+    # (marketing should be فصحى / MSA, not dialect).
+    ("ar_filler", "ar", r"(من الجدير بالذكر|تجدر الإشارة إلى|في هذا الإطار|في هذا السياق|في نهاية المطاف|على أرض الواقع)"),
+    ("ar_cliche", "ar", r"(حلول مبتكرة|جودة عالية|نهج شامل|قيمة مضافة|الخيار الأمثل|أفضل النتائج|رائدة في مجال)"),
+    ("ar_dialect", "ar", r"(احنا|إحنا|عايز|عاوز|بدي|دلوقتي|هلق|مفيش|مافيش|عشان|علشان)"),
 ]
 _COMPILED = [(rid, lang, re.compile(pat, re.IGNORECASE | re.MULTILINE)) for rid, lang, pat in _RULES]
 
@@ -25,9 +29,9 @@ _COMPILED = [(rid, lang, re.compile(pat, re.IGNORECASE | re.MULTILINE)) for rid,
 def scan(text: str, lang: str = "en") -> dict:
     hits = []
     for rid, rlang, rx in _COMPILED:
-        # apply same-language rules; EN rules also run on RU text (anglicisms leak in),
-        # but RU rules are not applied to EN text.
-        if rlang == "ru" and lang != "ru":
+        # EN rules apply to every language (anglicisms leak in); a non-EN ruleset
+        # (ru, ar) applies only when that is the scan language.
+        if rlang != "en" and rlang != lang:
             continue
         for m in rx.finditer(text):
             hits.append({"rule": rid, "lang": rlang, "span": m.group(0).strip()})

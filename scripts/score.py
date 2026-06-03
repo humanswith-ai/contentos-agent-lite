@@ -1,5 +1,5 @@
-"""Transparent AEO/quality scorer (spec sections 8/11). 8 weighted axes, each 0-100.
-Heuristic + documented — NOT the private tuned ContentOS model (moat boundary)."""
+"""Transparent AEO/quality heuristic — 8 weighted axes, each 0-100.
+This is the open, documented scorer; the hosted ContentOS uses per-engine models."""
 import re
 from scripts import antislop
 
@@ -39,7 +39,7 @@ def _axis_question_h2s(text: str) -> int:
     h2s = re.findall(r"^##\s+(.+)$", text, re.M)
     if not h2s:
         return 0
-    q = sum(1 for h in h2s if h.strip().endswith("?"))
+    q = sum(1 for h in h2s if h.strip().endswith(("?", "؟")))  # Latin ? + Arabic ؟
     return int(100 * q / len(h2s))
 
 

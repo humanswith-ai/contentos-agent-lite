@@ -1,4 +1,4 @@
-"""Research providers (spec sections 8/9): Tavily (search) + Firecrawl (read URL) + Serper (SERP/PAA).
+"""Research providers: Tavily (search) + Firecrawl (read URL) + Serper (SERP/PAA).
 All keys optional; no key -> manual-paste fallback. Timeout + never-crash; cache to _work/.cache/."""
 import os
 import json

@@ -9,7 +9,7 @@ _process, not a prompt_.** It walks your coding agent through **7 gates**: conte
 draft → checks → uplift → publish. Every draft gets a transparent **0–100 score across 8 axes**,
 locally, in your terminal. It's a free, self-hosted alternative to one-shot AI writers. It runs in
 **Claude Code / Cursor / Codex** with **zero API keys**, and gets sharper with a free research key.
-It scores both English and Russian content.
+It scores English, Russian, and Arabic content.
 
 > **Honest scope:** this is a _skeleton of the content process_, not a full platform. It won't
 > guarantee search rankings, do multi-source fact-checking, or run a learning loop. What it gives you:
@@ -91,7 +91,7 @@ managed pipeline (per-engine AEO, deep fact-check, best-of-N, team scale, hostin
 | Quality score | transparent single heuristic | per-engine AEO (ChatGPT / Perplexity / Gemini / AI Overview) |
 | Fact-check | source-presence discipline | KG + NLI + deep-verify |
 | Best-of-N variants | — | LLM-judge tournament |
-| Languages | EN/RU content scoring | EN / RU / AR native pipelines |
+| Languages | EN / RU / AR content scoring | EN / RU / AR native pipelines |
 | Team scale, hosting, learning loop | self-run | managed |
 
 Outgrow the skeleton? → **[See ContentOS for your category](https://humanswith.ai/platform/contentos/)**.
@@ -115,8 +115,10 @@ pipelines, team scale, and managed hosting.
 No. It improves how grounded, structured, and citable your text is — it does not promise positions.
 Anyone claiming a tool guarantees rankings is selling you something.
 
-### Does it work for Russian content?
-Yes. The scorer and anti-slop scanner accept `--lang ru` (the repo docs themselves are English).
+### Does it work for Russian or Arabic content?
+Yes. The scorer and anti-slop scanner accept `--lang ru` (Russian) and `--lang ar` (Arabic) — the
+repo docs themselves are English. Arabic detection covers MSA clichés, «حشو» filler, and dialect
+markers, and reads the Arabic question mark (؟). Deep native EN/RU/AR pipelines are the hosted ContentOS.
 
 ### What is AEO / GEO?
 Answer-Engine / Generative-Engine Optimization: writing so AI search (ChatGPT, Perplexity, Gemini,

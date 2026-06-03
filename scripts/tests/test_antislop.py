@@ -29,3 +29,25 @@ def test_ru_calque_intensifier():
     r = antislop.scan("Наше мощное бесшовное революционное решение.", "ru")
     assert r["count"] >= 2
     assert any(h["lang"] == "ru" for h in r["hits"])
+
+
+def test_ar_cliche_detected():
+    r = antislop.scan("نقدم حلول مبتكرة وجودة عالية لتحقيق أفضل النتائج.", "ar")
+    assert r["count"] >= 2
+    assert any(h["lang"] == "ar" for h in r["hits"])
+
+
+def test_ar_clean_text():
+    r = antislop.scan("تعالج المنصة 100 ألف طلب في الثانية.", "ar")
+    assert r["count"] == 0
+    assert r["verdict"] == "clean"
+
+
+def test_ar_dialect_flagged():
+    r = antislop.scan("احنا عايزين نعمل ده دلوقتي.", "ar")
+    assert any(h["rule"] == "ar_dialect" for h in r["hits"])
+
+
+def test_ru_rules_not_applied_to_arabic():
+    r = antislop.scan("حلول مبتكرة", "ar")
+    assert all(h["lang"] != "ru" for h in r["hits"])
