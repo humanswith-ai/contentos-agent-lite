@@ -10,8 +10,11 @@
     "trigger": "research step only, and only if that provider's key is set"
   },
   "writes": [
-    "<project>/content-agent/_work/*.md",
-    "<project>/content-agent/_work/.cache/"
+    "<project>/content-agent/** (scaffolded by `init`)",
+    "<project>/content-agent/_work/*.md (gate working files)",
+    "<project>/content-agent/_work/.cache/ (research cache, only if a provider key is set)",
+    "<project>/.env.example (by `init`)",
+    "<project>/CLAUDE.md and <project>/AGENTS.md (managed teaching block between markers, by `init`; re-runnable, preserves your other content)"
   ],
   "secrets": "read from local .env / environment only; none committed",
   "sudo": false,

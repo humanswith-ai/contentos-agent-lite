@@ -8,9 +8,12 @@ echo "ContentOS Agent Lite — pre-install check"
 echo "Root: $ROOT"
 echo
 
-echo "[1] Expected write paths (this tool writes ONLY here):"
-echo "    - <your project>/content-agent/_work/*.md"
-echo "    - <your project>/content-agent/_work/.cache/   (research cache, only if a key is set)"
+echo "[1] Expected write paths (this tool writes ONLY inside the project you point it at):"
+echo "    init  ->  <your project>/content-agent/**           (the gate folder)"
+echo "              <your project>/.env.example               (key template)"
+echo "              <your project>/CLAUDE.md , AGENTS.md       (a managed block between markers; re-runnable, keeps your content)"
+echo "    gates ->  <your project>/content-agent/_work/*.md   (working files the agent fills)"
+echo "              <your project>/content-agent/_work/.cache/ (research cache, only if a key is set)"
 echo
 
 echo "[2] Network behavior:"

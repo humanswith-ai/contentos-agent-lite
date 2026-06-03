@@ -25,3 +25,28 @@ def test_init_scaffolds(tmp_path):
     assert rc == 0
     assert (tmp_path / "content-agent").is_dir()
     assert (tmp_path / ".env.example").exists()
+
+
+def test_init_teaches_project_agent_docs(tmp_path):
+    rc = cli.main(["init", "--into", str(tmp_path)])
+    assert rc == 0
+    for name in ("CLAUDE.md", "AGENTS.md"):
+        body = (tmp_path / name).read_text()
+        assert "content agent" in body.lower()
+        assert "<!-- BEGIN contentos-agent-lite -->" in body
+
+
+def test_init_agent_docs_idempotent(tmp_path):
+    cli.main(["init", "--into", str(tmp_path)])
+    cli.main(["init", "--into", str(tmp_path)])
+    body = (tmp_path / "CLAUDE.md").read_text()
+    assert body.count("<!-- BEGIN contentos-agent-lite -->") == 1
+
+
+def test_init_preserves_existing_claude_md(tmp_path):
+    (tmp_path / "CLAUDE.md").write_text("# My Project\n\nhouse rule: be terse.\n")
+    cli.main(["init", "--into", str(tmp_path)])
+    body = (tmp_path / "CLAUDE.md").read_text()
+    assert "My Project" in body
+    assert "house rule: be terse." in body
+    assert "<!-- BEGIN contentos-agent-lite -->" in body

@@ -4,7 +4,7 @@ import json
 import sys
 import pathlib
 import shutil
-from scripts import score as score_mod, antislop, research
+from scripts import score as score_mod, antislop, research, agentdocs
 
 _HERE = pathlib.Path(__file__).resolve().parent
 _AGENT_SRC = _HERE.parent / "content-agent"
@@ -46,7 +46,10 @@ def _cmd_init(a):
         shutil.copy(env_src, into / ".env.example")
     else:
         (into / ".env.example").write_text("TAVILY_API_KEY=\nFIRECRAWL_API_KEY=\nSERPER_API_KEY=\n")
+    taught = agentdocs.write_agent_docs(into)
     print(f"Scaffolded content-agent/ into {into}")
+    print(f"Taught the project agent: {', '.join(pathlib.Path(p).name for p in taught)} "
+          "(managed block — safe to re-run)")
     return 0
 
 

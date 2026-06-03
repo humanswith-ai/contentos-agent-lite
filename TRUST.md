@@ -13,7 +13,7 @@ take our word for it. Here's exactly what it does — and how to prove it.
 | Property | Guarantee |
 |---|---|
 | **Network** | None by default. A provider (Tavily/Firecrawl/Serper) is called **only** if you set its key in `.env`, and **only** during `research`. |
-| **Writes** | Only `<your project>/content-agent/_work/*.md` and an optional `_work/.cache/`. Nothing outside the folder you point it at. |
+| **Writes** | Only inside the project you point it at. `init` scaffolds `content-agent/`, writes a `.env.example`, and adds a **managed teaching block** (between `<!-- BEGIN/END contentos-agent-lite -->` markers, re-runnable, your own content preserved) to `CLAUDE.md` + `AGENTS.md`. The gates write working files into `content-agent/_work/*.md` (+ optional `_work/.cache/`). Nothing outside that folder. |
 | **Secrets** | Read from your local `.env` / environment only. None are committed. `.env` is git-ignored. |
 | **Privilege** | No `sudo`, no system changes. |
 | **Publishing** | The agent **never** publishes your content — it hands you a `READY` piece + a QA report; you press the button. |

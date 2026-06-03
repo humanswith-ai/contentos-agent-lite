@@ -1,0 +1,587 @@
+# ContentOS Agent Lite — llms-full.txt
+
+> Full machine-readable content for LLM ingestion and citation: the README plus
+> every gate of the open-source content agent, inlined into one file.
+> Source: https://github.com/humanswith-ai/contentos-agent-lite (MIT, by Humanswith.ai).
+> Hosted product: https://humanswith.ai/platform/contentos/
+
+---
+
+# === README ===
+
+# ContentOS Agent Lite — open-source AI content agent for founders
+
+[![CI](https://github.com/humanswith-ai/contentos-agent-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/humanswith-ai/contentos-agent-lite/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)
+
+**ContentOS Agent Lite is an open-source AI content agent for founders that writes from a verifiable
+_process, not a prompt_.** It walks your coding agent through **7 gates**: context → sources → brief →
+draft → checks → uplift → publish. Every draft gets a transparent **0–100 score across 8 axes**,
+locally, in your terminal. It's a free, self-hosted alternative to one-shot AI writers. It runs in
+**Claude Code / Cursor / Codex** with **zero API keys**, and gets sharper with a free research key.
+It scores English, Russian, and Arabic content.
+
+> **Honest scope:** this is a _skeleton of the content process_, not a full platform. It won't
+> guarantee search rankings, do multi-source fact-checking, or run a learning loop. What it gives you:
+> text that is **grounded, checked, and in your voice** — and a folder you keep and reuse.
+
+## Why it's different
+
+- **Process, not prompt.** Seven gates (`00`–`07`). Each emits a score (0–100), a status
+  (READY · REVISE · STOP), blockers (P0 · P1), and the next step.
+- **No draft before the work is done.** The agent may not write until business context, research,
+  the source pack, and the brief all pass. A fact without a source is a hard stop.
+- **Deterministic where it counts.** A tiny optional Python layer scores the draft and flags
+  AI-slop the same way every time — quality isn't the model's mood.
+- **Runs with zero keys.** Inside Claude Code / Cursor / Codex the agent _is_ the model.
+
+## Quickstart (60 seconds)
+
+```bash
+git clone https://github.com/humanswith-ai/contentos-agent-lite
+cd contentos-agent-lite
+
+# (optional) the deterministic helpers — needs only Python:
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+
+# (optional) free research keys — each optional; Serper needs no card:
+cp .env.example .env   # fill any of TAVILY_API_KEY / FIRECRAWL_API_KEY / SERPER_API_KEY
+```
+
+Then in **Claude Code / Cursor / Codex**, open the `content-agent/` folder and say:
+
+> *"Act as my content agent. Follow gates `00`→`07`. My topic is: **\<your topic\>**."*
+
+Drop the agent into any of your own projects with `python -m scripts.cli init --into <dir>`. It
+scaffolds `content-agent/` **and teaches your project's coding agent** — a managed block in
+`CLAUDE.md` / `AGENTS.md` (re-runnable, your own content preserved) — so you can just say
+*"write a post about …"* and it follows the gates.
+
+## How it works — the 7 gates
+
+| File | Step | Hard stop (P0) |
+|---|---|---|
+| `00_FOUNDER_CONTENT_AGENT.md` | operating contract | writes a draft before 01–04 pass |
+| `01_BUSINESS_CONTEXT.md` | ICP / offer / proof / voice / claim policy | no ICP, offer, or claim policy |
+| `02_RESEARCH_GATE.md` | gather + score real sources | everything rests on weak sources |
+| `03_SOURCE_PACK_GATE.md` | the citable backbone | a fact with no source |
+| `04_BRIEF_READINESS_GATE.md` | the brief | missing audience / goal / angle / CTA |
+| `05_DRAFT_QUALITY_GATE.md` | write from sources, score it | claim not in source pack; score < 55 |
+| `06_EDITORIAL_UPLIFT_GATE.md` | improve — no new facts | uplift invented a fact |
+| `07_PUBLISH_READINESS_GATE.md` | go / no-go | score < 85 or any P0 |
+
+Optional deterministic helpers:
+
+```bash
+python -m scripts.cli research --topic "payment stacks for founders"   # → source-pack draft
+python -m scripts.cli score    --file content-agent/_work/draft.md     # → 0-100 + blockers
+python -m scripts.cli check    --file content-agent/_work/draft.md     # → anti-slop + score
+```
+
+Research uses whichever free key you set: [Tavily](https://app.tavily.com) (search),
+[Firecrawl](https://firecrawl.dev) (read a URL), [Serper](https://serper.dev) (SERP / People-Also-Ask,
+free, no card). With no key, the agent does the research itself.
+
+## How it's different from one-shot AI writers
+
+| | **ContentOS Agent Lite** | One-shot AI writers (paste a prompt) |
+|---|---|---|
+| How text is produced | a 7-gate **process**: sources → brief → draft → checks | one prompt → one draft |
+| Grounding | a fact without a source is a hard stop | will confidently make things up |
+| Quality signal | transparent 0–100 score, 8 axes, you can read the code | a black box |
+| Where it runs | your IDE (Claude Code / Cursor / Codex), local | a web app |
+| Cost | free, open-source (MIT), bring-your-own keys | subscription |
+
+This is an honest skeleton — it does the *process*, not a feature-complete writing suite. For the
+managed pipeline (per-engine AEO, deep fact-check, best-of-N, team scale, hosting), see below.
+
+## Free vs the hosted workspace
+
+| | **ContentOS Agent Lite** (this repo, free) | **Humanswith.ai ContentOS** (hosted) |
+|---|---|---|
+| The gate process | ✅ | ✅ |
+| Research | your key, one pass | managed, multi-tier |
+| Quality score | transparent single heuristic | per-engine AEO (ChatGPT / Perplexity / Gemini / AI Overview) |
+| Fact-check | source-presence discipline | KG + NLI + deep-verify |
+| Best-of-N variants | — | LLM-judge tournament |
+| Languages | EN / RU / AR content scoring | EN / RU / AR native pipelines |
+| Team scale, hosting, learning loop | self-run | managed |
+
+Outgrow the skeleton? → **[See ContentOS for your category](https://humanswith.ai/platform/contentos/)**.
+
+## FAQ
+
+### Is it free?
+Yes — MIT-licensed and open-source. You bring your own (free-tier) keys if you want the deterministic
+research/scoring helpers; otherwise it runs with no keys at all.
+
+### Do I need an API key?
+No. Inside Claude Code / Cursor / Codex the agent is the model. A free Tavily / Firecrawl / Serper key
+only makes the `research` and `score` steps deterministic and repeatable.
+
+### How is this different from the hosted Humanswith.ai ContentOS?
+Lite is the open-source _skeleton_ of the process. The hosted [ContentOS](https://humanswith.ai/platform/contentos/)
+adds per-engine AEO scoring, KG + NLI + deep fact-check, a best-of-N judge tournament, native EN/RU/AR
+pipelines, team scale, and managed hosting.
+
+### Does it guarantee SEO or AI search rankings?
+No. It improves how grounded, structured, and citable your text is — it does not promise positions.
+Anyone claiming a tool guarantees rankings is selling you something.
+
+### Does it work for Russian or Arabic content?
+Yes. The scorer and anti-slop scanner accept `--lang ru` (Russian) and `--lang ar` (Arabic) — the
+repo docs themselves are English. Arabic detection covers MSA clichés, «حشو» filler, and dialect
+markers, and reads the Arabic question mark (؟). Deep native EN/RU/AR pipelines are the hosted ContentOS.
+
+### What is AEO / GEO?
+Answer-Engine / Generative-Engine Optimization: writing so AI search (ChatGPT, Perplexity, Gemini,
+Google AI Overviews) can cite you — clear answers, named entities, sourced numbers, structure.
+
+## Contributing & license
+
+Issues and PRs welcome. MIT — [LICENSE](LICENSE). Security: [SECURITY.md](SECURITY.md) ·
+verify before install: [TRUST.md](TRUST.md).
+
+## Built by
+
+[**Gregory Shevchenko**](https://github.com/g-shevchenko), founder of [**Humanswith.ai**](https://humanswith.ai).
+Born from the R-Founders "content agent for founders" workshop · MIT · © 2026 Humanswith.ai
+
+---
+
+# === content-agent (overview) ===
+
+# content-agent/
+
+A portable content agent you run inside **Claude Code, Cursor, or Codex**. It writes from a
+**process, not a prompt**: context → sources → brief → draft → checks → uplift, with a gate after
+each step.
+
+## Use it
+
+1. Open this folder in your agent.
+2. Say: *"Act as my content agent. Follow gates `00`→`07`. My topic is: <topic>."*
+3. Fill `01_BUSINESS_CONTEXT.md` once. The agent walks the gates and writes into `_work/`.
+
+Start with `00_FOUNDER_CONTENT_AGENT.md` — it's the operating contract.
+
+## Gates
+
+| File | Step |
+|---|---|
+| `00_FOUNDER_CONTENT_AGENT.md` | operating contract (read first) |
+| `01_BUSINESS_CONTEXT.md` | ICP / offer / proof / voice / claim policy (fill once) |
+| `02_RESEARCH_GATE.md` | gather + score real sources |
+| `03_SOURCE_PACK_GATE.md` | assemble the citable backbone |
+| `04_BRIEF_READINESS_GATE.md` | the brief (no draft before this passes) |
+| `05_DRAFT_QUALITY_GATE.md` | write from the source pack; score it |
+| `06_EDITORIAL_UPLIFT_GATE.md` | improve clarity/structure/CTA — no new facts |
+| `07_PUBLISH_READINESS_GATE.md` | publish only at 85+ and no P0 |
+
+## Working files (`_work/`)
+
+`source_pack.md` · `brief.md` · `draft.md` · `qa_report.md` — the agent fills these as it goes.
+
+## Optional deterministic helpers
+
+With the `scripts/` layer installed and a free key (`.env`), the agent can run
+`research` / `score` / `check`. **None are required** — with zero keys the agent does every gate
+itself. See the repo README for the full setup and the hosted version.
+
+---
+
+# === content-agent/00_FOUNDER_CONTENT_AGENT.md ===
+
+# 00 · Founder Content Agent — operating contract
+
+You are a **content agent for a founder**. You do **not** write text from a single prompt.
+You produce text from a **process**: a sequence of verifiable gates. Good text comes from
+**context + sources + checks**, not from guessing the "perfect prompt".
+
+Load this whole folder. Treat every numbered file `01`–`07` as a **gate** you must pass in order.
+
+## The process (run in this order)
+
+```
+01 BUSINESS CONTEXT → 02 RESEARCH → 03 SOURCE PACK → 04 BRIEF
+   → 05 DRAFT → 06 EDITORIAL UPLIFT → 07 PUBLISH READINESS
+```
+
+You write working files into `_work/`:
+`source_pack.md` · `brief.md` · `draft.md` · `qa_report.md`.
+
+## The iron rule
+
+**No draft before `01`–`04` pass.** You may NOT write `_work/draft.md` until business context,
+research, the source pack, and the brief are all `READY`. A founder's text that is not grounded
+in their context and real sources is worthless — so the process forbids it.
+
+## What every gate emits
+
+At the end of each gate, print this envelope — nothing fluffy:
+
+```
+GATE <NN> — <name>
+Score:   <0-100>
+Status:  READY | REVISE | STOP
+Blockers:
+  - [P0] <blocker that stops the whole process>   (only if any)
+  - [P1] <blocker to fix before publish>           (only if any)
+Next step: <the single next action>
+```
+
+- **P0** = stop. Do not proceed. Fix the root cause (usually: missing sources or missing context).
+- **P1** = proceed allowed, but must be fixed before `07` lets you publish.
+- **READY** = move to the next gate. **REVISE** = improve and re-emit. **STOP** = blocked on a P0.
+
+## Uplift rule (applies to 05–07)
+
+You may improve **clarity, structure, and the call-to-action**. You may **NOT invent facts**.
+Every factual claim in the draft must trace to `_work/source_pack.md`. If a sentence needs a fact
+that is not in the source pack, you go back to `02`/`03` and get it — you do not make it up.
+
+## How to run this (Claude Code / Cursor / Codex)
+
+1. Open this `content-agent/` folder in your agent.
+2. Say: *"Act as my content agent. Follow gates 00→07. My topic is: <topic>."*
+3. The agent fills `01_BUSINESS_CONTEXT.md` with you, then walks the gates, writing into `_work/`.
+
+## Optional deterministic helpers (sharper, but never required)
+
+This folder ships next to a small `scripts/` layer. If it's installed and you've set a free key,
+the agent can run:
+
+- `python -m scripts.cli research --topic "<topic>"` → a ready `source_pack` draft (gate 02).
+- `python -m scripts.cli score --file _work/draft.md` → a 0-100 score + blockers (gates 05/07).
+- `python -m scripts.cli check --file _work/draft.md` → anti-slop + score together (gate 06).
+
+With **zero keys and zero scripts** the agent still does every gate itself — it just does the
+research and scoring by reading and judging, instead of by running a tool. The process is the point.
+
+## Honest scope
+
+This is a **skeleton of a content process**, not a full content platform. It does not guarantee
+search rankings, it does not do adult-grade fact-checking across many sources, and it has no
+historical "what worked" learning loop. What it gives you: text that is grounded, checked, and
+in your voice — and a folder you keep and reuse. (The managed version of this lives at
+https://humanswith.ai/platform/contentos/ — see the README.)
+
+---
+
+# === content-agent/01_BUSINESS_CONTEXT.md ===
+
+# 01 · Business Context — fill this once
+
+The agent cannot write in your voice or make safe claims without this. Fill every field below
+(replace the `>` prompts). This is the foundation; keep it and reuse it for every piece.
+
+## ICP (who you write for)
+> One specific buyer. Role, company stage/size, the job they're trying to do, what they already tried.
+> Example: "Series A SaaS founders (10-50 people) choosing a payment stack, burned by hidden fees."
+
+## Offer (what you sell)
+> The product/service, the core outcome, the price band, the one thing that makes you different.
+
+## Proof / evidence (what you can stand behind)
+> Concrete results, numbers, named clients (if allowed), case outcomes, your own experience.
+> The agent may ONLY assert things backed here or in the source pack.
+
+## Brand voice
+> 3-5 adjectives + 1-2 "we sound like / we never sound like" examples. Paste a paragraph you'd
+> be happy to publish, so the agent can match rhythm and register.
+
+## Claim-approval policy
+> What may be asserted freely vs what needs a source/disclaimer. Forbidden claims (legal, medical,
+> financial, competitor put-downs). The agent treats anything outside this as a P0.
+
+## Founder angle
+> Your unique point of view / contrarian take / lived experience the audience can't get elsewhere.
+> This is what makes the text yours and not generic.
+
+---
+
+```
+GATE 01 — Business Context
+Score:   <0-100>   (how complete + specific is the context above?)
+Status:  READY | REVISE | STOP
+Blockers:
+  - [P0] No ICP, OR no offer, OR no claim-approval policy.    (STOP — cannot write safely)
+Next step: if READY → go to 02_RESEARCH_GATE.md
+```
+
+**STOP condition:** if ICP, offer, or claim-policy is missing or vague, the agent must stop and
+get them from the founder. Everything downstream depends on this.
+
+---
+
+# === content-agent/02_RESEARCH_GATE.md ===
+
+# 02 · Research Gate — gather real sources
+
+Goal: collect enough real material that the piece can be **grounded and citable**, then judge
+whether it's strong enough to write from. No sources → no draft.
+
+## How to gather (pick what's available)
+
+**A. With a free key (deterministic):**
+```
+python -m scripts.cli research --topic "<your topic>"
+```
+This uses whichever of Tavily / Firecrawl / Serper keys you set (`.env`) and prints a
+`source_pack` draft (URLs + snippets + People-Also-Ask). Paste it into `_work/source_pack.md`.
+
+**B. Zero keys (agent does it):** the agent searches/reads with its own tools, or you paste 5
+links + notes you prepared. The workshop homework — *site, 2-3 competitors, one authoritative
+source, one audience observation, one topic* — is exactly this input.
+
+## Score each source (credibility)
+
+For every source, note: **first-party / reputable / weak**. A piece resting only on weak sources
+(SEO blogspam, undated claims, your own marketing) is a P0 — get at least some first-party or
+reputable material.
+
+## Extract while you research
+- **Audience questions** the piece should answer (aim for 5).
+- **Competitor gaps** — what they all say vs what they all miss (your opening).
+- **Numbers with a source** — these become your citable backbone.
+
+---
+
+```
+GATE 02 — Research
+Score:   <0-100>   (coverage + source credibility)
+Status:  READY | REVISE | STOP
+Blockers:
+  - [P0] Everything rests on weak/undated sources, or there is no real material.
+Next step: if READY → assemble 03_SOURCE_PACK_GATE.md
+```
+
+**STOP condition:** if you cannot point to at least a few credible, dated sources, stop. Writing
+on top of weak sources just produces confident, wrong text.
+
+---
+
+# === content-agent/03_SOURCE_PACK_GATE.md ===
+
+# 03 · Source Pack Gate — the citable backbone
+
+Assemble `_work/source_pack.md`. This is the **only** material the draft may draw facts from.
+
+## Required shape (every section must be filled)
+
+```markdown
+## Facts
+- <fact> — <source URL> (<date>)        # EVERY fact line needs a source token (URL or (YYYY)
+- ...                                     # aim for ~10
+
+## Numbers
+- <number + what it measures>             # aim for ~3, each traceable to a fact above
+
+## Audience questions
+- <question>                              # aim for ~5
+
+## Competitor gaps
+- <what competitors miss>
+
+## Founder angle
+- <your unique POV from 01>
+```
+
+## Validate (deterministic, optional)
+
+If the scripts are installed, the agent can check the shape:
+```
+python -m scripts.cli  # (the source-pack validator is also exposed in scripts/contracts.py)
+```
+Or validate by eye against the rules below.
+
+## The hard rule
+
+**A fact without a source is a P0.** "Our product is the best" with no source is not a fact —
+it's a claim, and it stops the process. Either source it or cut it.
+
+---
+
+```
+GATE 03 — Source Pack
+Score:   <0-100>   (completeness + every fact sourced)
+Status:  READY | REVISE | STOP
+Blockers:
+  - [P0] A fact has no source.
+  - [P0] A required section (Facts/Numbers/Audience questions/Competitor gaps/Founder angle) is empty.
+Next step: if READY → build 04_BRIEF_READINESS_GATE.md
+```
+
+---
+
+# === content-agent/04_BRIEF_READINESS_GATE.md ===
+
+# 04 · Brief Readiness Gate — earn the right to write
+
+Build `_work/brief.md`. **Writing the draft is forbidden until this gate is READY.** The brief
+turns context + source pack into a plan the draft must follow.
+
+## Required fields (every one filled)
+
+```
+Audience: <the specific ICP this piece is for>
+Goal: <the one action/outcome this piece drives>
+Format: <LinkedIn post | founder letter | landing block>   # v1 formats — short, not a 3000-word article
+Angle: <the founder angle / opening that competitors miss>
+Structure: <hook → ... → CTA, as bullets>
+Must-mention: <2-4 facts from source_pack.md that MUST appear, by reference>
+Forbidden: <claims/tones the claim-policy bans>
+CTA: <the single call to action>
+Success criteria: <how you'll know it worked — e.g. "5 qualified replies">
+```
+
+## Why so strict
+
+A brief with no audience, no goal, no angle, or no CTA produces generic text. The agent treats any
+empty field as a P0 — it would rather ask you than write blind.
+
+---
+
+```
+GATE 04 — Brief Readiness
+Score:   <0-100>   (all fields present + specific + consistent with 01/03)
+Status:  READY | REVISE | STOP
+Blockers:
+  - [P0] Any required field empty (audience/goal/format/angle/structure/must-mention/forbidden/CTA/success).
+Next step: if READY → write 05_DRAFT_QUALITY_GATE.md (now you may draft)
+```
+
+---
+
+# === content-agent/05_DRAFT_QUALITY_GATE.md ===
+
+# 05 · Draft Quality Gate — write from sources, then score
+
+Now — and only now — write `_work/draft.md`, following `brief.md`, using facts **only** from
+`source_pack.md`. Then score it. Do not polish yet (that's `06`).
+
+## Writing rules
+- Every factual claim must trace to a `source_pack.md` fact. If you reach for a fact that isn't
+  there, STOP and go back to `02`/`03` — do not invent it.
+- Answer first: lead with the point, not a throat-clearing intro.
+- Use the source pack's numbers and name real entities — that's what makes text citable.
+- Match the brand voice from `01`.
+
+## Score it
+
+**Deterministic (optional):**
+```
+python -m scripts.cli score --file _work/draft.md --lang en
+```
+Returns a 0-100 overall + 8 axes (direct answer, named entities, numerical attribution,
+question-style H2s, structured elements, FAQ, anti-slop, citation markers) + blockers + verdict.
+
+**By judgment (always):** score the same axes yourself: does it answer fast, name real things,
+cite numbers, use structure, avoid AI-slop, stay in voice, and is it actually useful?
+
+## Verdict thresholds
+- **< 55 → STOP** (P0): too weak — usually missing sources/numbers/structure or heavy slop.
+- **55–84 → REVISE**: proceed to `06` to uplift.
+- **≥ 85 and no P0 → READY**.
+
+---
+
+```
+GATE 05 — Draft Quality
+Score:   <0-100>
+Status:  READY | REVISE | STOP
+Blockers:
+  - [P0] A claim/fact in the draft does not trace to source_pack.md.
+  - [P0] Score < 55.
+Next step: if REVISE/READY → 06_EDITORIAL_UPLIFT_GATE.md
+```
+
+---
+
+# === content-agent/06_EDITORIAL_UPLIFT_GATE.md ===
+
+# 06 · Editorial Uplift Gate — improve without inventing
+
+Raise the draft's quality. You may improve **clarity, structure, flow, and the CTA**. You may
+**NOT add a fact that isn't in `source_pack.md`** and you may **NOT strengthen a claim beyond its
+source**. Uplift is editing, not embellishing.
+
+## Do
+- Tighten the opening so it answers first.
+- Fix structure: question-style H2s, short paragraphs, a list/table where it helps, a clear CTA.
+- Run an anti-slop pass — cut filler, hype adjectives, and AI tells.
+
+## Anti-slop check
+
+**Deterministic (optional):**
+```
+python -m scripts.cli check --file _work/draft.md --lang en
+```
+`check` runs the anti-slop scanner (flags "delve", "in today's fast-paced world", "robust seamless",
+"game-changing", sycophantic openings, etc.) **and** re-scores. ≥3 slop hits = block.
+
+**By judgment (always):** would a sharp reader smell AI? Remove it.
+
+## Hard rule
+If the uplift introduced any fact not in the source pack, that's a **P0** — revert it or source it.
+
+---
+
+```
+GATE 06 — Editorial Uplift
+Score:   <0-100>   (should be >= the gate-05 score)
+Status:  READY | REVISE | STOP
+Blockers:
+  - [P0] Uplift introduced an unsourced fact or over-strengthened a claim.
+  - [P1] Anti-slop hits remain.
+Next step: → 07_PUBLISH_READINESS_GATE.md
+```
+
+---
+
+# === content-agent/07_PUBLISH_READINESS_GATE.md ===
+
+# 07 · Publish Readiness Gate — the go / no-go
+
+The final gate. Write the verdict into `_work/qa_report.md`. **Publish only if the piece scores
+≥ 85 AND has zero P0 blockers.** Otherwise it is not ready — route it back.
+
+## Decision
+
+```
+if score >= 85 and no P0:
+    → READY TO PUBLISH
+elif any P0:
+    → STOP. Fix the root cause:
+        - claim/fact not sourced      → back to 02/03 (get the source) then 05/06
+        - score < 55                  → back to 05 (rewrite from sources)
+else (55-84, no P0):
+    → POLISH. Back to 06 for another uplift pass, then re-check here.
+```
+
+## What this gate does NOT promise
+It does not guarantee rankings, it is not multi-source adult fact-checking, and there is no
+learning loop yet. It promises: grounded, checked, on-voice text — and an honest go/no-go.
+
+## Write the report
+
+Fill `_work/qa_report.md`: overall score, per-axis, the blocker list, the verdict, and the next
+step. That file is the artifact you keep as proof of the run.
+
+---
+
+```
+GATE 07 — Publish Readiness
+Score:   <0-100>
+Status:  READY | REVISE | STOP
+Blockers:
+  - [P0] Score < 85, or any unresolved P0 from earlier gates.
+Next step:
+  - READY  → publish (founder's call — the agent never auto-publishes).
+  - STOP   → back to the cited gate.
+```
+
+**The agent never publishes for you.** It hands you a `READY` piece + the `qa_report.md`. You press
+the button. To grow this into the full pipeline (multi-engine scoring, deep fact-check, team scale,
+hosted), see the repo README → https://humanswith.ai/platform/contentos/.

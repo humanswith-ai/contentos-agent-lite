@@ -1,6 +1,6 @@
 # QA report — payment stack: payout speed vs fees (illustrative)
 
-> Actual output of `python -m scripts.cli score --file examples/draft.md` (2026-06-03).
+> Actual output of `python -m scripts.cli score --file examples/landing-block/draft.md` (2026-06-03).
 
 - **Overall score:** 94
 - **Verdict:** READY

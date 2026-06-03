@@ -42,7 +42,10 @@ Then in **Claude Code / Cursor / Codex**, open the `content-agent/` folder and s
 
 > *"Act as my content agent. Follow gates `00`→`07`. My topic is: **\<your topic\>**."*
 
-Drop the agent into any of your own projects with `python -m scripts.cli init --into <dir>`.
+Drop the agent into any of your own projects with `python -m scripts.cli init --into <dir>`. It
+scaffolds `content-agent/` **and teaches your project's coding agent** — a managed block in
+`CLAUDE.md` / `AGENTS.md` (re-runnable, your own content preserved) — so you can just say
+*"write a post about …"* and it follows the gates.
 
 ## How it works — the 7 gates
 
