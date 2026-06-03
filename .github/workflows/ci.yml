@@ -1,0 +1,22 @@
+name: ci
+
+# Third-party actions are pinned to full commit SHAs (supply-chain hardening).
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.11"
+      - name: Install dev deps
+        run: pip install -r requirements-dev.txt
+      - name: Pre-install check (secret scan + contract)
+        run: bash scripts/agent-preinstall-check.sh
+      - name: Tests
+        run: python -m pytest -q

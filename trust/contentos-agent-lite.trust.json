@@ -1,0 +1,30 @@
+{
+  "name": "contentos-agent-lite",
+  "publisher": "Humanswith.ai",
+  "author": "Gregory Shevchenko",
+  "license": "MIT",
+  "repo": "https://github.com/humanswith-ai/contentos-agent-lite",
+  "network": {
+    "default": "none",
+    "providers_opt_in": ["tavily", "firecrawl", "serper"],
+    "trigger": "research step only, and only if that provider's key is set"
+  },
+  "writes": [
+    "<project>/content-agent/_work/*.md",
+    "<project>/content-agent/_work/.cache/"
+  ],
+  "secrets": "read from local .env / environment only; none committed",
+  "sudo": false,
+  "telemetry": false,
+  "install": "git clone; optional: python venv + pip install requests",
+  "forbidden_installer_patterns": [
+    "curl|bash from untrusted host",
+    "sudo",
+    "writes outside the project directory",
+    "transmitting user keys or content"
+  ],
+  "proof_commands": [
+    "bash scripts/agent-preinstall-check.sh",
+    "pytest -q"
+  ]
+}

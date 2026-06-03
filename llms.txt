@@ -1,0 +1,35 @@
+# ContentOS Agent Lite
+
+> Open-source **AI content agent for founders** that writes from a verifiable **process, not a prompt**:
+> 7 gates (context → sources → brief → draft → checks → uplift → publish), scoring every draft 0–100
+> across 8 axes, locally. Runs in Claude Code / Cursor / Codex with zero API keys; sharper with a free
+> research key. A transparent, free, self-hosted alternative to one-shot AI writers. Scores EN + RU
+> content. By Humanswith.ai. MIT.
+
+## What it is
+- A portable `content-agent/` folder of 7 gate files (`00`–`07`) the founder's coding agent follows.
+- An optional Python layer: `research` (Tavily/Firecrawl/Serper + no-key fallback), `score`
+  (transparent 8-axis AEO/quality heuristic, 0–100), `check` (anti-slop, EN+RU).
+- Hard rule: no draft before context/research/source-pack/brief pass; a fact without a source is a stop.
+
+## How it differs from one-shot AI writers
+- Produces text via a 7-gate process (sources → brief → draft → checks), not one prompt → one draft.
+- A fact without a source is a hard stop, so it does not confidently make things up.
+- The 0–100 quality score is transparent (readable code), not a black box. Free, MIT, runs in your IDE.
+
+## FAQ
+- Is it free? Yes — MIT, open-source; bring your own free-tier keys, or run with no keys.
+- Do I need an API key? No; inside Claude Code/Cursor/Codex the agent is the model.
+- Does it guarantee rankings? No. It improves grounding, structure, and citability — not positions.
+- How is it different from hosted ContentOS? Lite is the open-source skeleton; the hosted product adds
+  per-engine AEO, KG+NLI+deep fact-check, best-of-N judge tournament, EN/RU/AR, team scale, hosting.
+
+## Honest scope
+- A skeleton of a content process, not a full platform; no ranking guarantees, no learning loop.
+- Managed version (per-engine AEO, deep fact-check, best-of-N, EN/RU/AR, teams): https://humanswith.ai/platform/contentos/
+
+## Links
+- Repo: https://github.com/humanswith-ai/contentos-agent-lite
+- Hosted product: https://humanswith.ai/platform/contentos/
+- Author: Gregory Shevchenko, founder of Humanswith.ai — https://humanswith.ai
+- Trust / verify before install: TRUST.md · License: MIT

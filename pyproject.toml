@@ -1,0 +1,15 @@
+[project]
+name = "contentos-agent-lite"
+version = "0.1.0"
+description = "Open-source content agent for founders — write from a process, not a prompt. By Humanswith.ai."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = ["requests>=2.31,<3"]
+
+[project.scripts]
+contentos-agent-lite = "scripts.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["scripts/tests"]
+addopts = "-q"
