@@ -151,6 +151,7 @@ Three open-source agents (MIT, zero-key) that mirror the loop of the hosted
 - **Measure** — [ai-visibility-probe-lite](https://github.com/humanswith-ai/ai-visibility-probe-lite): where do AI engines ignore you?
 - **Produce + Publish** — **contentos-agent-lite** (this repo): write from a process, not a prompt — incl. gate 08, publish & distribute.
 - **Optimize** — [aeo-site-audit-lite](https://github.com/humanswith-ai/aeo-site-audit-lite): is your page Fetchable, Chosen, and Extractable?
+- **Design** — [brand-card-lite](https://github.com/humanswith-ai/brand-card-lite): your brand tokens → on-brand social/OG cards.
 
 ## Contributing & license
 
