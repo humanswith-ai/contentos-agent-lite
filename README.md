@@ -5,7 +5,7 @@
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 
 **ContentOS Agent Lite is an open-source AI content agent for founders that writes from a verifiable
-_process, not a prompt_.** It walks your coding agent through **7 gates**: context → sources → brief →
+_process, not a prompt_.** It walks your coding agent through **8 gates**: context → sources → brief →
 draft → checks → uplift → publish. Every draft gets a transparent **0–100 score across 8 axes**,
 locally, in your terminal. It's a free, self-hosted alternative to one-shot AI writers. It runs in
 **Claude Code / Cursor / Codex** with **zero API keys**, and gets sharper with a free research key.
