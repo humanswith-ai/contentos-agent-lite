@@ -132,6 +132,15 @@ markers, and reads the Arabic question mark (؟). Deep native EN/RU/AR pipelines
 Answer-Engine / Generative-Engine Optimization: writing so AI search (ChatGPT, Perplexity, Gemini,
 Google AI Overviews) can cite you — clear answers, named entities, sourced numbers, structure.
 
+## Part of the free Humanswith.ai suite
+
+Three open-source agents (MIT, zero-key) that mirror the loop of the hosted
+[Humanswith.ai Workspace](https://humanswith.ai/platform/):
+
+- **Measure** — [ai-visibility-probe-lite](https://github.com/humanswith-ai/ai-visibility-probe-lite): where do AI engines ignore you?
+- **Produce + Publish** — **contentos-agent-lite** (this repo): write from a process, not a prompt — incl. gate 08, publish & distribute.
+- **Optimize** — [aeo-site-audit-lite](https://github.com/humanswith-ai/aeo-site-audit-lite): is your page Fetchable, Chosen, and Extractable?
+
 ## Contributing & license
 
 Issues and PRs welcome. MIT — [LICENSE](LICENSE). Security: [SECURITY.md](SECURITY.md) ·
