@@ -1,10 +1,10 @@
-"""ContentOS Agent Lite CLI: init / research / score / check."""
+"""ContentOS Agent Lite CLI: init / research / score / check / publish."""
 import argparse
 import json
 import sys
 import pathlib
 import shutil
-from scripts import score as score_mod, antislop, research, agentdocs
+from scripts import score as score_mod, antislop, research, agentdocs, publish as publish_mod
 
 _HERE = pathlib.Path(__file__).resolve().parent
 _AGENT_SRC = _HERE.parent / "content-agent"
@@ -31,6 +31,34 @@ def _cmd_research(a):
     else:
         print(research.to_source_pack_md(r, a.topic))
     return 0
+
+
+def _cmd_publish(a):
+    text = pathlib.Path(a.file).read_text()
+    out = {"lint": publish_mod.lint_publish(text, a.canonical)}
+    if a.distribute:
+        if not (a.canonical and a.title and a.summary):
+            print("error: --distribute needs --canonical, --title and --summary", file=sys.stderr)
+            return 2
+        plats = [p.strip() for p in a.platforms.split(",")] if a.platforms else None
+        out["distribution"] = publish_mod.distribution_drafts(a.canonical, a.title, a.summary, plats)
+    if a.json:
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+    else:
+        print(_fmt_lint(out["lint"]))
+        for plat, body in out.get("distribution", {}).items():
+            print(f"\n--- {plat} ---\n{body}")
+    return 0 if out["lint"]["passed"] else 1
+
+
+def _fmt_lint(r):
+    lines = [f"publish lint [{r['format']}]: {'PASS' if r['passed'] else 'FAIL'}"]
+    for k, v in r["checks"].items():
+        mark = "ok " if v is True else ("n/a" if v is None else "MISS")
+        lines.append(f"  [{mark}] {k}")
+    for b in r["blockers"]:
+        lines.append(f"  [{b['severity']}] {b['check']}: {b['message']}")
+    return "\n".join(lines)
 
 
 def _cmd_init(a):
@@ -81,6 +109,15 @@ def main(argv=None):
     i = sub.add_parser("init")
     i.add_argument("--into", default=".")
     i.set_defaults(fn=_cmd_init)
+    pub = sub.add_parser("publish")
+    pub.add_argument("--file", required=True)
+    pub.add_argument("--canonical")
+    pub.add_argument("--distribute", action="store_true")
+    pub.add_argument("--title")
+    pub.add_argument("--summary")
+    pub.add_argument("--platforms")
+    pub.add_argument("--json", action="store_true")
+    pub.set_defaults(fn=_cmd_publish)
     a = p.parse_args(argv)
     return a.fn(a)
 

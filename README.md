@@ -17,7 +17,7 @@ It scores English, Russian, and Arabic content.
 
 ## Why it's different
 
-- **Process, not prompt.** Seven gates (`00`–`07`). Each emits a score (0–100), a status
+- **Process, not prompt.** Eight gates (`00`–`08`). Each emits a score (0–100), a status
   (READY · REVISE · STOP), blockers (P0 · P1), and the next step.
 - **No draft before the work is done.** The agent may not write until business context, research,
   the source pack, and the brief all pass. A fact without a source is a hard stop.
@@ -40,14 +40,14 @@ cp .env.example .env   # fill any of TAVILY_API_KEY / FIRECRAWL_API_KEY / SERPER
 
 Then in **Claude Code / Cursor / Codex**, open the `content-agent/` folder and say:
 
-> *"Act as my content agent. Follow gates `00`→`07`. My topic is: **\<your topic\>**."*
+> *"Act as my content agent. Follow gates `00`→`08`. My topic is: **\<your topic\>**."*
 
 Drop the agent into any of your own projects with `python -m scripts.cli init --into <dir>`. It
 scaffolds `content-agent/` **and teaches your project's coding agent** — a managed block in
 `CLAUDE.md` / `AGENTS.md` (re-runnable, your own content preserved) — so you can just say
 *"write a post about …"* and it follows the gates.
 
-## How it works — the 7 gates
+## How it works — the 8 gates
 
 | File | Step | Hard stop (P0) |
 |---|---|---|
@@ -59,6 +59,7 @@ scaffolds `content-agent/` **and teaches your project's coding agent** — a man
 | `05_DRAFT_QUALITY_GATE.md` | write from sources, score it | claim not in source pack; score < 55 |
 | `06_EDITORIAL_UPLIFT_GATE.md` | improve — no new facts | uplift invented a fact |
 | `07_PUBLISH_READINESS_GATE.md` | go / no-go | score < 72 or any P0 |
+| `08_DISTRIBUTION_GATE.md` | publish canonical-first, distribute with backlinks | a published copy with no canonical, or a silo copy with no backlink |
 
 Optional deterministic helpers:
 
@@ -66,6 +67,9 @@ Optional deterministic helpers:
 python -m scripts.cli research --topic "payment stacks for founders"   # → source-pack draft
 python -m scripts.cli score    --file content-agent/_work/draft.md     # → 0-100 + blockers
 python -m scripts.cli check    --file content-agent/_work/draft.md     # → anti-slop + score
+python -m scripts.cli publish  --file dist/post/index.html --canonical https://you.com/post/  # → pre-publish lint
+python -m scripts.cli publish  --file dist/post/index.html --canonical https://you.com/post/ \
+  --distribute --title "Headline" --summary "One line."                # → canonical-first drafts
 ```
 
 Research uses whichever free key you set: [Tavily](https://app.tavily.com) (search),
@@ -76,7 +80,7 @@ free, no card). With no key, the agent does the research itself.
 
 | | **ContentOS Agent Lite** | One-shot AI writers (paste a prompt) |
 |---|---|---|
-| How text is produced | a 7-gate **process**: sources → brief → draft → checks | one prompt → one draft |
+| How text is produced | an 8-gate **process**: sources → brief → draft → checks → publish | one prompt → one draft |
 | Grounding | a fact without a source is a hard stop | will confidently make things up |
 | Quality signal | transparent 0–100 score, 8 axes, you can read the code | a black box |
 | Where it runs | your IDE (Claude Code / Cursor / Codex), local | a web app |
@@ -94,6 +98,7 @@ managed pipeline (per-engine AEO, deep fact-check, best-of-N, team scale, hostin
 | Quality score | transparent single heuristic | per-engine AEO (ChatGPT / Perplexity / Gemini / AI Overview) |
 | Fact-check | source-presence discipline | KG + NLI + deep-verify |
 | Best-of-N variants | — | LLM-judge tournament |
+| Publish & distribute | canonical lint + canonical-first drafts | guarded rebuild + post-publish re-scan + Workspace Files sync |
 | Languages | EN / RU / AR content scoring | EN / RU / AR native pipelines |
 | Team scale, hosting, learning loop | self-run | managed |
 

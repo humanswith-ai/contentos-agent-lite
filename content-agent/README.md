@@ -1,13 +1,13 @@
 # content-agent/
 
 A portable content agent you run inside **Claude Code, Cursor, or Codex**. It writes from a
-**process, not a prompt**: context → sources → brief → draft → checks → uplift, with a gate after
-each step.
+**process, not a prompt**: context → sources → brief → draft → checks → uplift → publish, with a
+gate after each step.
 
 ## Use it
 
 1. Open this folder in your agent.
-2. Say: *"Act as my content agent. Follow gates `00`→`07`. My topic is: <topic>."*
+2. Say: *"Act as my content agent. Follow gates `00`→`08`. My topic is: <topic>."*
 3. Fill `01_BUSINESS_CONTEXT.md` once. The agent walks the gates and writes into `_work/`.
 
 Start with `00_FOUNDER_CONTENT_AGENT.md` — it's the operating contract.
@@ -24,6 +24,7 @@ Start with `00_FOUNDER_CONTENT_AGENT.md` — it's the operating contract.
 | `05_DRAFT_QUALITY_GATE.md` | write from the source pack; score it |
 | `06_EDITORIAL_UPLIFT_GATE.md` | improve clarity/structure/CTA — no new facts |
 | `07_PUBLISH_READINESS_GATE.md` | publish only at 72+ and no P0 |
+| `08_DISTRIBUTION_GATE.md` | publish canonical-first; distribute with backlinks |
 
 ## Working files (`_work/`)
 
@@ -32,5 +33,5 @@ Start with `00_FOUNDER_CONTENT_AGENT.md` — it's the operating contract.
 ## Optional deterministic helpers
 
 With the `scripts/` layer installed and a free key (`.env`), the agent can run
-`research` / `score` / `check`. **None are required** — with zero keys the agent does every gate
-itself. See the repo README for the full setup and the hosted version.
+`research` / `score` / `check` / `publish`. **None are required** — with zero keys the agent does
+every gate itself. See the repo README for the full setup and the hosted version.

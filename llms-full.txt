@@ -28,7 +28,7 @@ It scores English, Russian, and Arabic content.
 
 ## Why it's different
 
-- **Process, not prompt.** Seven gates (`00`–`07`). Each emits a score (0–100), a status
+- **Process, not prompt.** Eight gates (`00`–`08`). Each emits a score (0–100), a status
   (READY · REVISE · STOP), blockers (P0 · P1), and the next step.
 - **No draft before the work is done.** The agent may not write until business context, research,
   the source pack, and the brief all pass. A fact without a source is a hard stop.
@@ -51,14 +51,14 @@ cp .env.example .env   # fill any of TAVILY_API_KEY / FIRECRAWL_API_KEY / SERPER
 
 Then in **Claude Code / Cursor / Codex**, open the `content-agent/` folder and say:
 
-> *"Act as my content agent. Follow gates `00`→`07`. My topic is: **\<your topic\>**."*
+> *"Act as my content agent. Follow gates `00`→`08`. My topic is: **\<your topic\>**."*
 
 Drop the agent into any of your own projects with `python -m scripts.cli init --into <dir>`. It
 scaffolds `content-agent/` **and teaches your project's coding agent** — a managed block in
 `CLAUDE.md` / `AGENTS.md` (re-runnable, your own content preserved) — so you can just say
 *"write a post about …"* and it follows the gates.
 
-## How it works — the 7 gates
+## How it works — the 8 gates
 
 | File | Step | Hard stop (P0) |
 |---|---|---|
@@ -70,6 +70,7 @@ scaffolds `content-agent/` **and teaches your project's coding agent** — a man
 | `05_DRAFT_QUALITY_GATE.md` | write from sources, score it | claim not in source pack; score < 55 |
 | `06_EDITORIAL_UPLIFT_GATE.md` | improve — no new facts | uplift invented a fact |
 | `07_PUBLISH_READINESS_GATE.md` | go / no-go | score < 72 or any P0 |
+| `08_DISTRIBUTION_GATE.md` | publish canonical-first, distribute with backlinks | a published copy with no canonical, or a silo copy with no backlink |
 
 Optional deterministic helpers:
 
@@ -77,6 +78,9 @@ Optional deterministic helpers:
 python -m scripts.cli research --topic "payment stacks for founders"   # → source-pack draft
 python -m scripts.cli score    --file content-agent/_work/draft.md     # → 0-100 + blockers
 python -m scripts.cli check    --file content-agent/_work/draft.md     # → anti-slop + score
+python -m scripts.cli publish  --file dist/post/index.html --canonical https://you.com/post/  # → pre-publish lint
+python -m scripts.cli publish  --file dist/post/index.html --canonical https://you.com/post/ \
+  --distribute --title "Headline" --summary "One line."                # → canonical-first drafts
 ```
 
 Research uses whichever free key you set: [Tavily](https://app.tavily.com) (search),
@@ -87,7 +91,7 @@ free, no card). With no key, the agent does the research itself.
 
 | | **ContentOS Agent Lite** | One-shot AI writers (paste a prompt) |
 |---|---|---|
-| How text is produced | a 7-gate **process**: sources → brief → draft → checks | one prompt → one draft |
+| How text is produced | an 8-gate **process**: sources → brief → draft → checks → publish | one prompt → one draft |
 | Grounding | a fact without a source is a hard stop | will confidently make things up |
 | Quality signal | transparent 0–100 score, 8 axes, you can read the code | a black box |
 | Where it runs | your IDE (Claude Code / Cursor / Codex), local | a web app |
@@ -105,6 +109,7 @@ managed pipeline (per-engine AEO, deep fact-check, best-of-N, team scale, hostin
 | Quality score | transparent single heuristic | per-engine AEO (ChatGPT / Perplexity / Gemini / AI Overview) |
 | Fact-check | source-presence discipline | KG + NLI + deep-verify |
 | Best-of-N variants | — | LLM-judge tournament |
+| Publish & distribute | canonical lint + canonical-first drafts | guarded rebuild + post-publish re-scan + Workspace Files sync |
 | Languages | EN / RU / AR content scoring | EN / RU / AR native pipelines |
 | Team scale, hosting, learning loop | self-run | managed |
 
@@ -155,13 +160,13 @@ Born from the R-Founders "content agent for founders" workshop · MIT · © 2026
 # content-agent/
 
 A portable content agent you run inside **Claude Code, Cursor, or Codex**. It writes from a
-**process, not a prompt**: context → sources → brief → draft → checks → uplift, with a gate after
-each step.
+**process, not a prompt**: context → sources → brief → draft → checks → uplift → publish, with a
+gate after each step.
 
 ## Use it
 
 1. Open this folder in your agent.
-2. Say: *"Act as my content agent. Follow gates `00`→`07`. My topic is: <topic>."*
+2. Say: *"Act as my content agent. Follow gates `00`→`08`. My topic is: <topic>."*
 3. Fill `01_BUSINESS_CONTEXT.md` once. The agent walks the gates and writes into `_work/`.
 
 Start with `00_FOUNDER_CONTENT_AGENT.md` — it's the operating contract.
@@ -178,6 +183,7 @@ Start with `00_FOUNDER_CONTENT_AGENT.md` — it's the operating contract.
 | `05_DRAFT_QUALITY_GATE.md` | write from the source pack; score it |
 | `06_EDITORIAL_UPLIFT_GATE.md` | improve clarity/structure/CTA — no new facts |
 | `07_PUBLISH_READINESS_GATE.md` | publish only at 72+ and no P0 |
+| `08_DISTRIBUTION_GATE.md` | publish canonical-first; distribute with backlinks |
 
 ## Working files (`_work/`)
 
@@ -186,8 +192,8 @@ Start with `00_FOUNDER_CONTENT_AGENT.md` — it's the operating contract.
 ## Optional deterministic helpers
 
 With the `scripts/` layer installed and a free key (`.env`), the agent can run
-`research` / `score` / `check`. **None are required** — with zero keys the agent does every gate
-itself. See the repo README for the full setup and the hosted version.
+`research` / `score` / `check` / `publish`. **None are required** — with zero keys the agent does
+every gate itself. See the repo README for the full setup and the hosted version.
 
 ---
 
@@ -594,3 +600,80 @@ Next step:
 **The agent never publishes for you.** It hands you a `READY` piece + the `qa_report.md`. You press
 the button. To grow this into the full pipeline (multi-engine scoring, deep fact-check, team scale,
 hosted), see the repo README → https://humanswith.ai/platform/contentos/.
+
+---
+
+# === content-agent/08_DISTRIBUTION_GATE.md ===
+
+# 08 · Publish & Distribute Gate — canonical-first, backlink-always
+
+Gate 07 said the *words* are ready. This gate is about publishing them so an AI answer
+engine can **fetch and attribute the citation to a URL you own** — and distributing them
+without your rented silos out-ranking your own page.
+
+Two moves, in order.
+
+## A. Publish on your own site first (the canonical)
+
+Before you press publish, lint the page. With the `scripts/` layer:
+
+```
+python -m scripts.cli publish --file dist/your-post/index.html --canonical https://you.com/your-post/
+```
+
+(or do it by hand from this checklist):
+
+```
+[ ] exactly ONE <link rel="canonical"> → your own URL          (P0 — without it, copies compete with you)
+[ ] exactly ONE <h1>                                            (P1 — zero/duplicate H1 breaks extraction)
+[ ] Open Graph: og:title, og:description, og:url                (P1 — controls the share card)
+[ ] Article / BlogPosting JSON-LD                               (P1 — the strongest AI-citability signal)
+[ ] meta description                                            (P2 — else the engine picks a random snippet)
+[ ] the page is in sitemap.xml and not blocked by robots/noindex
+```
+
+**P0 fails block publish.** Publish the canonical, confirm it returns 200 and renders, then —
+and only then — distribute.
+
+## B. Distribute canonical-first (every copy backlinks the original)
+
+Generate adaptation drafts that all point back to the canonical:
+
+```
+python -m scripts.cli publish --canonical https://you.com/your-post/ \
+  --distribute --title "Your headline" --summary "One-line summary." \
+  --file dist/your-post/index.html
+```
+
+You get a canonical-first draft per platform — **LinkedIn, Medium, dev.to, VC.ru, Dzen,
+Telegram, X** — each ending in a link to the original. The rule never changes:
+
+- **Publish on your domain first.** The canonical accrues the authority and the citations.
+- **Every silo copy links back** to the canonical. On Medium use *Import a story* (sets
+  rel=canonical); on dev.to set `canonical_url`. A copy with no backlink cannibalises you.
+- **Adapt, don't paste.** Re-hook for each audience; keep the claim/number set identical to
+  the canonical (no new unsourced facts — that would reopen gate 02/03).
+
+## What this gate does NOT do
+
+It does not publish for you, it does not rebuild your site, and it does not re-measure
+whether AI engines started citing you. It gives you a clean pre-publish lint + canonical-first
+drafts — the manual skeleton.
+
+---
+
+```
+GATE 08 — Publish & Distribute
+Lint:    PASS | FAIL   (FAIL = an unresolved P0, e.g. missing canonical)
+Canonical: <your owned URL>
+Distribution: drafts generated, every copy backlinks the canonical
+Next step:
+  - PASS → publish the canonical (your call — the agent never auto-publishes), then post the
+           backlinked adaptations.
+  - FAIL → fix the P0 (usually: add the canonical), re-lint.
+```
+
+**The agent never publishes for you.** It hands you a linted page + canonical-first drafts;
+you press the button. The hosted version does the **guarded rebuild**, the **automatic
+post-publish re-scan** (did AI engines start citing you?), and the **Workspace Files** sync —
+see the repo README → https://humanswith.ai/platform/content-publisher/.
